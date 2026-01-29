@@ -3,11 +3,12 @@ version: 0.2
 env:
   variables:
     LAMBDA_FUNCTION_NAME: nivedh-code-build-testing
+    GOTOOLCHAIN: local
 
 phases:
   install:
     runtime-versions:
-      golang: 1.25.5
+      golang: 1.21
     commands:
       - go mod download
 
@@ -18,6 +19,5 @@ phases:
 
   post_build:
     commands:
-      - aws lambda update-function-code \
-          --function-name nivedh-code-build-testing \
-          --zip-file fileb://function.zip    
+      - echo "Deploying to Lambda: $LAMBDA_FUNCTION_NAME"
+      - aws lambda update-function-code --function-name "$LAMBDA_FUNCTION_NAME" --zip-file fileb://function.zip
